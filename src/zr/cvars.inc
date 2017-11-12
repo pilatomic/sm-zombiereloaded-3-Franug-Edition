@@ -72,6 +72,8 @@ enum CvarsList
 	Handle:CVAR_CLASSES_ADMIN_SELECT,
 	Handle:CVAR_CLASSES_SPEED_METHOD,
 	Handle:CVAR_CLASSES_CSGO_KNOCKBACK_AIRMULTIPLIER,
+    Handle:CVAR_CLASSES_CSGO_KNOCKBACK_BOOST,
+    Handle:CVAR_CLASSES_CSGO_KNOCKBACK_BOOST_MAX,
 	Handle:CVAR_WEAPONS,
 	Handle:CVAR_WEAPONS_RESTRICT,
 	Handle:CVAR_WEAPONS_RESTRICT_ENDEQUIP,
@@ -285,6 +287,8 @@ CvarsCreate()
 	g_hCvarsList[CVAR_CLASSES_ADMIN_SELECT]			 =	CreateConVar("zr_classes_admin_select",			"1",			"Allow admins to select admin mode classes. (Not to be confused by admin-only classes!)");
 	g_hCvarsList[CVAR_CLASSES_SPEED_METHOD]			 =	CreateConVar("zr_classes_speed_method",			"prop",		 "Speed method to use when applying player speed. Do not touch this if you don't know what you're doing! [\"lmv\" = Lagged movement value | \"prop\" = Player speed property");
 	g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_AIRMULTIPLIER]	 =	CreateConVar("zr_classes_csgo_knockback_airmultiplier",	"0.5",			"CS:GO only: Multiplier for knockback on the air");
+    g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST]     =    CreateConVar("zr_classes_csgo_knockback_boost",    "251.0",            "CS: GO only: Applies an upwards boost if necessary as a workaround for low knock back when standing on the ground. Side effects: Weaker and flying zombies (compensate with lower knock back).");
+    g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST_MAX]     =    CreateConVar("zr_classes_csgo_knockback_boost_max",    "350.0",            "CS: GO only: Max knockback upward boost velocity).");
 	// Menu
 	g_hCvarsList[CVAR_CLASSES_MENU_AUTOCLOSE]		   =	CreateConVar("zr_classes_menu_autoclose",	  "1",			"Automatically close class selection menu after selecting a class.");
 	

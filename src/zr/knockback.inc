@@ -25,11 +25,6 @@
  * ============================================================================
  */
 
-/**
- * Minimum upwards boost that is required to push zombies off the ground.
- */
-#define CSGO_KNOCKBACK_BOOST		251.0
-#define CSGO_KNOCKBACK_BOOST_MAX	350.0
 
 /** Client has been hurt.
  *
@@ -122,11 +117,11 @@ KnockbackOnClientHurt(client, attacker, const String:weapon[], hitgroup, dmg_hea
 	// Apply damage knockback multiplier.
 	knockback *= float(dmg_health);
 	
-	if (g_Game == Game_CSGO)
-	{
-		// Apply multiplier if client on air
-		if(GetEntPropEnt(client, Prop_Send, "m_hGroundEntity") == -1) knockback *= GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_AIRMULTIPLIER]);
-	}
+	//if (g_Game == Game_CSGO)
+	//{
+	//	// Apply multiplier if client on air
+	//	if(GetEntPropEnt(client, Prop_Send, "m_hGroundEntity") == -1) knockback *= GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_AIRMULTIPLIER]);
+	//}
 	
 	// Apply knockback.
 	KnockbackSetVelocity(client, attackerloc, clientloc, knockback);
@@ -151,8 +146,32 @@ KnockbackSetVelocity(client, const Float:startpoint[3], const Float:endpoint[3],
 	
 	// Apply the magnitude by scaling the vector (multiplying each of its components).
 	ScaleVector(vector, magnitude);
-	
-	// ADD the given vector to the client's current velocity.
+
+
+    // CS: GO workaround. Apply knock back.
+    if (g_Game == Game_CSGO)
+    {
+        new boostValue = GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST]);
+        new maxBoostValue = GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST_MAX]);
+
+        new flags = GetEntityFlags(client);
+        new Float:velocity[3];
+        ToolsGetClientVelocity(client, velocity);
+
+        // Remove boost if disabled or current velocity is too high.
+        if (boostValue <= 0.0 || velocity[2] > maxBoostValue)
+        {
+            // Don't add extra boost.
+            vector[2] = 0.0;
+        }
+        else if (flags & FL_ONGROUND && vector[2] < boostValue)
+        {
+            // Apply minimum boost required to push player off the ground.
+            vector[2] = boostValue;
+        }
+    }
+
+    // ADD the given vector to the client's current velocity.
 	ToolsClientVelocity(client, vector);
 }
 
