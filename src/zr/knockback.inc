@@ -143,13 +143,16 @@ KnockbackSetVelocity(client, const Float:startpoint[3], const Float:endpoint[3],
 	
 	// Normalize the vector (equal magnitude at varying distances).
 	NormalizeVector(vector, vector);
+
+    vector[2] = GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST]);
 	
 	// Apply the magnitude by scaling the vector (multiplying each of its components).
 	ScaleVector(vector, magnitude);
 
+    PrintToServer("KNOCKBACK SET VELOCITY");
 
     // CS: GO workaround. Apply knock back.
-    if (g_Game == Game_CSGO)
+    /*if (g_Game == Game_CSGO)
     {
         new boostValue = GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST]);
         new maxBoostValue = GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CSGO_KNOCKBACK_BOOST_MAX]);
@@ -163,13 +166,15 @@ KnockbackSetVelocity(client, const Float:startpoint[3], const Float:endpoint[3],
         {
             // Don't add extra boost.
             vector[2] = 0.0;
+            PrintToServer("KNOCKBACK STOP");
         }
         else if (flags & FL_ONGROUND && vector[2] < boostValue)
         {
             // Apply minimum boost required to push player off the ground.
             vector[2] = boostValue;
+            PrintToServer("KNOCKBACK BOOST");
         }
-    }
+    }*/
 
     // ADD the given vector to the client's current velocity.
 	ToolsClientVelocity(client, vector);
